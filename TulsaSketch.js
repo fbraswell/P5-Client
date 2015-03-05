@@ -13,7 +13,10 @@ var greeting;
 var useDiv;
 var feedID, apiKey, chanName;
 var feed08, feed10, feed13, feed14, feed15, feed16, feed17, feed20, feed100, feed101, feedxx;
-var allFeeds = new Array(); // array of feeds
+var feedNames = ['PowerTest08', 'PowerTest10', 'PowerTest13', 'PowerTest14', 
+					'PowerTest15', 'PowerTest16', 'PowerTest17', 'PowerTest20', 
+					'PowerTest100', 'PowerTest101'];
+var allFeeds = new Array(); // array of feed objects
 var xivelyFeeds;
 var city = 'Indianapolis';
 city = 'Upland';
@@ -166,6 +169,22 @@ function handleSD(result) // handle SpecialData Xively Feed only
 	var indent = 10;
 	var vert = 210;
 	var vspace = 60;
+	var tmpFeed;
+	// Get data from all feeds in array
+	for (var i = 0; i<feedNames.length; i++)
+	{
+//		tmpFeed = new XFeed(indent, vert, feedNames[i]); allFeeds.push(tmpFeed);
+//		tmpFeed.mygetdata();
+
+			// init a new XFeed object with name feedNames[i] 
+			// and push object onto allFeeds array
+		allFeeds.push(new XFeed(indent, vert, feedNames[i]));
+			// call object method mygetdata() to fetch feed data from Xively
+		allFeeds[allFeeds.length-1].mygetdata();
+			// move down the pages to next box
+		vert+=vspace;
+	}
+/*	
 	feed08 = new XFeed(indent, vert, 'PowerTest08'); allFeeds.push(feed08);
 	feed08.mygetdata();
 //	feed08.mousePressed();
@@ -187,6 +206,7 @@ function handleSD(result) // handle SpecialData Xively Feed only
 	feed100.mygetdata();
 	feed101 = new XFeed(indent, vert+=vspace, 'PowerTest101'); allFeeds.push(feed101);
 	feed101.mygetdata();
+*/
 //	feedxx = new XFeed(10, 100, 'feedxx'); allFeeds.push(feedxx);
 } // function handleSD(result) 
 //_________________________________________________//
@@ -194,7 +214,25 @@ function getTxt()
 {
 	
 //	feedxx = new XFeed(10, 100, inp.value());
-	feedxx.mygetdata(inp.value());
+//	feedxx.mygetdata(inp.value());
+		// see if inp.value() is already on end of array allFeeds
+	if(inp.value() == allFeeds[allFeeds.length-1].myname)
+	{
+		return; // if already displayed, return
+	}
+		// if the y value is 100 on last allFeeds object, it means that the box is
+		// already present - do not add new object
+	if (allFeeds[allFeeds.length-1].y == 100)
+	{
+		allFeeds[allFeeds.length-1].myname = inp.value();
+	} else
+	{
+		// add new object if not one there - first add
+		allFeeds.push(new XFeed(10, 100, inp.value()));
+	}
+		// call object method mygetdata() to fetch feed data from Xively
+	allFeeds[allFeeds.length-1].mygetdata();
+	
 //	push();
 //	useDiv = useDivPTxx;
 //	getFeedInfo(inp.value(), 10, 400);
@@ -227,7 +265,7 @@ function XFeed(xpos, ypos, feedname)
 //	print('begin name: '+this.myname+'; x: '+this.x+'; y: '+this.y);
 //	this.mygetdata(); // prepare for getting data from Xively feeds thru Webscript
 	
-} // XFeed Class	
+} // function XFeed(xpos, ypos, feedname)
 	
 //	XFeed.prototype.mygetdata = function(feedname)
 	XFeed.prototype.mygetdata = function()
@@ -235,7 +273,7 @@ function XFeed(xpos, ypos, feedname)
 //		this.myname = feedname; // name of feed: PowerTestxxx
 		this.boxon = true;
 		this.myrect;
-		print('begin name: '+this.myname+'; x: '+this.x+'; y: '+this.y);
+		print('mygetdata: '+this.myname+'; x: '+this.x+'; y: '+this.y+'; allFeeds.length: '+allFeeds.length);
 		// Can't display until after callback is done loading JSON data
 
 		// Can't display without specialData
@@ -307,6 +345,8 @@ function XFeed(xpos, ypos, feedname)
 		rect(this.x-10, this.y-10, 300, 55);
 		this.mydiv.position(this.x, this.y);
 	}
+	
+//__________________End XFeed Class_______________________________//
 
 	// Called from XFeed.prototype.mydisplay = function()
 	function xfmousePressed()
@@ -375,6 +415,7 @@ function touchStarted()
 "device_serial":"PowerTest101"}
 */
 //_________________________________________________//
+/*
 // Data dump for a channel
 {"id":"bootcount","current_value":"15","at":"2015-03-05T16:49:04.246346Z","max_value":"3187.0","min_value":"0.0",
 "datapoints":[{"value":"892","at":"2015-03-05T10:51:03.058165Z"},{"value":"893","at":"2015-03-05T10:53:04.362077Z"},
@@ -398,5 +439,5 @@ function touchStarted()
 {"value":"928","at":"2015-03-05T12:03:03.606885Z"},{"value":"929","at":"2015-03-05T12:05:02.985538Z"},
 {"value":"930","at":"2015-03-05T12:07:03.918246Z"},{"value":"931","at":"2015-03-05T12:09:03.619429Z"},
 {"value":"40","at":"2015-03-05T14:10:16.126514Z"},{"value":"41","at":"2015-03-05T14:12:05.566650Z"}],"version":"1.0.0"}
-
+*/
 //_________________________________________________//
