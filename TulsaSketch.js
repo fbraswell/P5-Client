@@ -12,7 +12,6 @@ var button;
 var greeting;
 var useDiv;
 var feedID, apiKey, chanName;
-var feed08, feed10, feed13, feed14, feed15, feed16, feed17, feed20, feed100, feed101, feedxx;
 var feedNames = ['PowerTest08', 'PowerTest10', 'PowerTest13', 'PowerTest14', 
 					'PowerTest15', 'PowerTest16', 'PowerTest17', 'PowerTest20', 
 					'PowerTest100', 'PowerTest101'];
@@ -68,6 +67,7 @@ function setup()
 	mapDiv = createDiv("<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1559232.7164557346!2d-78.72334648750007!3d40.245165495742405!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1423505008092\" width=\"600\" height=\"450\" frameborder=\"1\" style=\"border:0\"></iframe>"); 
 //	mapDiv.position(400, 70);
 	
+		// set up input box and button
 	inp = createInput(); // input box
 	inp.position(10, 180);
 	inp.value('PowerTest');
@@ -76,7 +76,7 @@ function setup()
 	
 	textAlign(LEFT);
 //	fill(0);
-	textSize(18);
+	textSize(16);
 	textFont("Times");
 	
 } // function setup() 
@@ -95,22 +95,11 @@ function draw()
   }
 	  background(255, 255, 255); // blank screen white
 	  background(0, 0, 255, 25); // lay down background color
-//	  feed13.dispDiv();
-//	  feed14.dispDiv();
-//	  feed15.dispDiv();
-//	  feed16.dispDiv();
-//	  feed100.dispDiv();
-//	  feed101.dispDiv();
-//	  feedxx.dispDiv();
-//	  for(var f in allFeeds)
-//	  {
-//	  	f.dispDiv();
-//	  }
 	  for (var i=0; i<allFeeds.length; i++)
 	  {
 	  	allFeeds[i].dispDiv();
 	  }
-	  mapDiv.position(400, 70);
+	  mapDiv.position(600, 70);
 //	  img = createImg("SMLOGO.gif"); // load SOM Logo
 	  img.size(200, AUTO); // Use AUTO to have the height or width auto scale.
 	  img.position(20, 20); // place SOM Logo
@@ -150,15 +139,18 @@ function handleSD(result) // handle SpecialData Xively Feed only
 {
 	var vpos = 550;
 	var hpos = 400;
-	var vhei = 15;
+	vpos = 80;
+	hpos = 20;
+//	var vhei = 15;
 	specialData = result;
 	
 //	var tempDiv = createDiv('Special Data result'+
-		var tempDiv = createDiv('Special Data result'+
-						'<br>ID: '+result.id+
-						'<br>Title: '+result.title+
-						'<br>Feed Name: '+result.device_serial+
-						'<br>Status: '+result.status);
+//		var tempDiv = createDiv('Special Data result'+
+//						'<br>ID: '+result.id+
+//						'<br>Title: '+result.title+
+//						'<br>Feed Name: '+result.device_serial+
+//						'<br>Status: '+result.status);
+	var tempDiv = createDiv("Received: "+result.title);
 	tempDiv.position(hpos, vpos);
 	
 	// At this point, we have Special Data, so we can
@@ -169,7 +161,7 @@ function handleSD(result) // handle SpecialData Xively Feed only
 	var indent = 10;
 	var vert = 210;
 	var vspace = 60;
-	var tmpFeed;
+//	var tmpFeed;
 	// Get data from all feeds in array
 	for (var i = 0; i<feedNames.length; i++)
 	{
@@ -184,37 +176,10 @@ function handleSD(result) // handle SpecialData Xively Feed only
 			// move down the pages to next box
 		vert+=vspace;
 	}
-/*	
-	feed08 = new XFeed(indent, vert, 'PowerTest08'); allFeeds.push(feed08);
-	feed08.mygetdata();
-//	feed08.mousePressed();
-	feed10 = new XFeed(indent, vert+=vspace, 'PowerTest10'); allFeeds.push(feed10);
-	feed10.mygetdata();
-	feed13 = new XFeed(indent, vert+=vspace, 'PowerTest13'); allFeeds.push(feed13);
-	feed13.mygetdata();
-	feed14 = new XFeed(indent, vert+=vspace, 'PowerTest14'); allFeeds.push(feed14);
-	feed14.mygetdata();
-	feed15 = new XFeed(indent, vert+=vspace, 'PowerTest15'); allFeeds.push(feed15);
-	feed15.mygetdata();
-	feed16 = new XFeed(indent, vert+=vspace, 'PowerTest16'); allFeeds.push(feed16);
-	feed16.mygetdata();
-	feed17 = new XFeed(indent, vert+=vspace, 'PowerTest17'); allFeeds.push(feed17);
-	feed17.mygetdata()
-	feed20 = new XFeed(indent, vert+=vspace, 'PowerTest20'); allFeeds.push(feed20);
-	feed20.mygetdata();
-	feed100 = new XFeed(indent, vert+=vspace, 'PowerTest100'); allFeeds.push(feed100);
-	feed100.mygetdata();
-	feed101 = new XFeed(indent, vert+=vspace, 'PowerTest101'); allFeeds.push(feed101);
-	feed101.mygetdata();
-*/
-//	feedxx = new XFeed(10, 100, 'feedxx'); allFeeds.push(feedxx);
 } // function handleSD(result) 
 //_________________________________________________//
 function getTxt()
 {
-	
-//	feedxx = new XFeed(10, 100, inp.value());
-//	feedxx.mygetdata(inp.value());
 		// see if inp.value() is already on end of array allFeeds
 	if(inp.value() == allFeeds[allFeeds.length-1].myname)
 	{
@@ -232,11 +197,6 @@ function getTxt()
 	}
 		// call object method mygetdata() to fetch feed data from Xively
 	allFeeds[allFeeds.length-1].mygetdata();
-	
-//	push();
-//	useDiv = useDivPTxx;
-//	getFeedInfo(inp.value(), 10, 400);
-//	pop();	
 }
 
 function refreshFeeds()
@@ -246,33 +206,26 @@ function refreshFeeds()
 	  	allFeeds[i].mygetdata();
 	  }
 }
-//_________________________________________________//
+//____________________XFeed Class_____________________________//
 // XFeed Class
 function XFeed(xpos, ypos, feedname)
 {
 	this.x = xpos; // remember x
 	this.y = ypos; // remember y
 	this.myname = feedname // name of feed: PowerTestxxx
-//	this.myname = feedname; // name of feed: PowerTestxxx
 	this.mydiv = createDiv('');
-//	this.myblock = 0; 
-//	this.id = 'IDxx';
-//	this.title = 'titlexx';
-//	this.status = 'statusxx';
-//	this.device_serial = 'device_serialxx';
+//	this.myrect = rect(this.x-10, this.y-10, 300, 55);
 	this.xdata
 	
 //	print('begin name: '+this.myname+'; x: '+this.x+'; y: '+this.y);
-//	this.mygetdata(); // prepare for getting data from Xively feeds thru Webscript
 	
 } // function XFeed(xpos, ypos, feedname)
 	
-//	XFeed.prototype.mygetdata = function(feedname)
+//____________________XFeed Class_____________________________//
 	XFeed.prototype.mygetdata = function()
 	{
-//		this.myname = feedname; // name of feed: PowerTestxxx
 		this.boxon = true;
-		this.myrect;
+//		this.myrect;
 		print('mygetdata: '+this.myname+'; x: '+this.x+'; y: '+this.y+'; allFeeds.length: '+allFeeds.length);
 		// Can't display until after callback is done loading JSON data
 
@@ -302,6 +255,7 @@ function XFeed(xpos, ypos, feedname)
 		}
 	} // this.mygetdata
 	
+//____________________XFeed Class_____________________________//
 	// callback for loadJSON
 	XFeed.prototype.getFeed = function(result) // handle Xively Feed 
 	{
@@ -309,6 +263,7 @@ function XFeed(xpos, ypos, feedname)
 		this.mydisplay();	// Display the info	
 	} // getFeed
 
+//____________________XFeed Class_____________________________//
 	XFeed.prototype.mydisplay = function()
 	{
 //		print('mydisplay name: '+this.myname+'; x: '+this.x+'; y: '+this.y+'; ID: '+this.id);
@@ -316,14 +271,16 @@ function XFeed(xpos, ypos, feedname)
 //		var c;
 		if (this.xdata.status == 'live')
 		{
-			this.boxColor = color(0, 255, 0, 100);
+			this.boxColor = color(0, 255, 0, 100); // green = live
 		} else
 		{
-			this.boxColor = color(255, 0, 0, 100);
+			this.boxColor = color(255, 0, 0, 100); // red = frozen
 		}
-		noStroke();
-		fill(this.boxColor);
-		rect(this.x-10, this.y-10, 300, 55);
+//		noStroke();
+//		fill(this.boxColor);
+//		rect(this.x-10, this.y-10, 300, 55);
+		this.drawRect(this.x, this.y, this.boxColor);
+//		this.myrect.fill(this.boxColor);
 		this.mydiv.html('Feed Name: '+this.xdata.device_serial+
 						', Status: '+this.xdata.status+
 						'<br>X ID: '+this.xdata.id+
@@ -338,22 +295,38 @@ function XFeed(xpos, ypos, feedname)
 		this.mydiv.mousePressed(xfmousePressed.bind(this));
 	} // function mydisplay
 
+//____________________XFeed Class_____________________________//
 	XFeed.prototype.dispDiv = function()
 	{
+//		noStroke();
+//		fill(this.boxColor);
+//		rect(this.x-10, this.y-10, 300, 55);
+		this.drawRect(this.x, this.y, this.boxColor);
+//		this.myrect.fill(this.boxColor);
+//		this.myrect.position(this.x-10, this.y-10);
+
+	// only need to redraw the rect, not the Div
+//		this.mydiv.position(this.x, this.y);
+	}
+	
+//____________________XFeed Class_____________________________//
+	// draw rectangle around main Div
+	XFeed.prototype.drawRect = function(x, y, color)
+	{
 		noStroke();
-		fill(this.boxColor);
-		rect(this.x-10, this.y-10, 300, 55);
-		this.mydiv.position(this.x, this.y);
+		fill(color);
+		rect(x-10, y-10, 300, 55);
 	}
 	
 //__________________End XFeed Class_______________________________//
 
-	// Called from XFeed.prototype.mydisplay = function()
+	// callback function for object mousePressed
+	// set up from XFeed.prototype.mydisplay = function()
 	function xfmousePressed()
 //	XFeed.prototype.mousePressed = function() // handle mousepressed for Xfeed
 	{
 		noStroke();
-		print('in mousePressed: x: '+this.x+', y: '+this.y+', name: '+this.myname);
+		print('in mousePressed: x: '+this.x+', y: '+this.y+', name: '+this.myname+', boxon: '+this.boxon);
 		if (this.boxon)
 		{
 		var c = color(0, 0, 255, 50);
@@ -368,6 +341,7 @@ function XFeed(xpos, ypos, feedname)
 						);
 		} else
 		{
+				// convert time to local
 		var t = new Date(this.xdata.datastreams[0].at);
 		var c = color(0, 255, 255, 100);
 		fill(c);
